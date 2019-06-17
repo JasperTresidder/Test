@@ -1,9 +1,9 @@
 ball = [];
+temp = [];
 
 function setup() {
-  createCanvas(600, 500);
+  createCanvas(900, 1200);
   pipe = new Pipe();
-  frameRate = 40;
 }
 
 function draw() {
@@ -16,13 +16,25 @@ function draw() {
       ball[i].show();
     }
   }
+  if (ball.length > 14) {
+    for (var i = 14; i > -1; i--) {
+      temp[i - 14] = ball[i];
+    }
+    temp.pop();
+    ball = [];
+    for (var i = 0; i < temp.length; i++) {
+      ball[i] = temp[13 - i];
+    }
+    temp = [];
+  }
 }
+
 
 class Pipe {
   constructor() {
     this.x = width - 86;
-    this.y = height - 300;
-    this.speed = createVector(4);
+    this.y = height - width/2;
+    this.speed = createVector(4,0);
 
   }
 
@@ -36,8 +48,8 @@ class Pipe {
 
   display() {
     fill(0);
-    ellipse(this.x, this.y, 10, 10);
-    ellipse(this.x + 85, this.y, 10, 10);
+    ellipse(this.x, this.y, 30, 30);
+    ellipse(this.x + 175, this.y, 30, 30);
   }
 }
 
@@ -59,11 +71,11 @@ class Ball {
 
   show() {
     fill(255, 0, 0);
-    ellipse(this.x, this.y, 25, 25);
+    ellipse(this.x, this.y, 50, 50);
   }
 
 }
 
-function mouseReleased(){
+function mouseClicked() {
   ball.push(new Ball());
 }
