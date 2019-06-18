@@ -13,6 +13,10 @@ function setup() {
   button = createButton('fullScreen');
   button.position(7, 3);
   button.mousePressed(ESC);
+  
+  button = createButton('reset');
+  button.position(width - 45, 3);
+  button.mousePressed(REDO);
 }
 
 function draw() {
@@ -93,10 +97,7 @@ class Ball {
         this.x = 25;
       }
       
-    }
-    
-    
-    
+    }    
     if (this.y + 25 > height) {
       this.velocity.y = -(this.velocity.y * 0.9);
       this.y = -25 + height;
@@ -184,4 +185,8 @@ function rotates(velocity, angle) {
     };
 
     return rotatedVelocities;
+}
+
+function REDO(){
+  ball = [];
 }
