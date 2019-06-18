@@ -11,7 +11,7 @@ function setup() {
   pipe = new Pipe();
   
   button = createButton('fullScreen');
-  button.position(7, 3);
+  button.position(3, 3);
   button.mousePressed(ESC);
   
   button = createButton('reset');
@@ -125,7 +125,9 @@ class Ball {
 }
 
 function mouseClicked() {
-  ball.push(new Ball());
+  if((mouseX > 80 || mouseY > 23) &&(mouseX<width-50 || mouseY > 23)){
+    ball.push(new Ball());
+  }
 }
 function ESC(){
     let fs = fullscreen();
