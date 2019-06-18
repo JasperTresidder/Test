@@ -102,7 +102,7 @@ class Ball {
       this.velocity.y = -(this.velocity.y * 0.9);
       this.y = -25 + height;
       if(this.down == 0){
-        this.velocity.x = random(-4, 4)
+        //this.velocity.x = random(-4, 4)
       }
       this.down += 1;
     }
