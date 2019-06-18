@@ -1,16 +1,16 @@
 ball = [];
 temp = [];
-var alpha, beta, gamma;
+var alphas, beta, gamma, ialphas ,ibeta, igamma;
 var oW = 0;
 var oH = 0;
 
 function setup() {
-  var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-  var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  createCanvas(w, h);
+  createCanvas(displayWidth, displayHeight);
   oW = windowWidth;
   oH = windowHeight;
   pipe = new Pipe();
+  
+  drag = false;
 
   button = createButton('fullScreen');
   button.position(3, 3);
@@ -20,15 +20,43 @@ function setup() {
   button.position(width - 45, 3);
   button.mousePressed(REDO);
   
-  alphas = 670;
+  alphas = 1;
   beta = 0;
   gamma = 0;
+  
+  ialphas = 1;
+  ibeta = 0;
+  igamma = 0;
+  tempx = 0;
+  tempy = 0;
+  var check = 0;
+  strokeWeight(1);
 }
 
 function draw() {
   background(220);
   // pipe.move();
   // pipe.display();
+  if(drag == true){
+    var dista = dist(mouseX,mouseY,tempx,tempy);
+    var direc = atan((mouseY-tempy)/(mouseX-tempx));
+    if(dista < 30){
+      strokeWeight(3);
+      line(mouseX,mouseY,tempx,tempy);
+    }else if(dista < 60){
+      strokeWeight(6);
+      line(mouseX,mouseY,tempx,tempy);
+    }else if(dista < 90){
+      strokeWeight(9);
+      line(tempx,tempy,mouseX,mouseY)
+    }else{
+      strokeWeight(9);
+      var d = createVector(mouseX-tempx,mouseY-tempy);
+      d = d.setMag(90);
+      line(tempx,tempy,tempx + d.x,tempy + d.y);
+    }
+    strokeWeight(1);
+  }
   if (typeof ball[0] != "undefined") {
     for (var i = 0; i < ball.length; i++) {
       ball[i].update();
@@ -40,13 +68,16 @@ function draw() {
     ball.pop();
     reverse(ball)
   }
+  var check = check + 1;
 }
 
 class Pipe {
-  constructor() {
+  constructor(vx,vy) {
     this.x = width - 86;
     this.y = height - width / 2;
-    this.speed = createVector(4, 0);
+    this.speed = createVector(0,0);
+    this.speed.x = vx/10;
+    this.speed.y = vy/10;
 
   }
 
@@ -66,10 +97,10 @@ class Pipe {
 }
 
 class Ball {
-  constructor() {
-    this.x = mouseX;
-    this.y = mouseY;
-    this.velocity = createVector(0, 0);
+  constructor(vx,vy) {
+    this.x = tempx;
+    this.y = tempy;
+    this.velocity = createVector(vx/3, vy/3);
     this.mass = 1;
     this.g = createVector(0, 1);
     this.r = 50;
@@ -86,11 +117,15 @@ class Ball {
       }
 
     }
+    console.log(mag(this.velocity));
+    if(mag(this.velocity.x,this.velocity.y) > 90){
+      this.velocity = this.velocity.setMag(90);
+    }
   }
 
 
   update() {
-    this.grav = createVector(beta,alphas);
+    this.grav = createVector(beta+(ibeta-beta),alphas + (ialphas-alphas));
     this.g = createVector(0,1);
     
     this.velocity.y += this.g.y;
@@ -117,6 +152,11 @@ class Ball {
       }
       this.down += 1;
     }
+    
+    if(this.y - 25 < 0){
+      this.velocity.y = -(this.velocity.y)
+      this.y = 25;
+    }
 
     for (var i = 0; i < ball.length; i++) {
       if (this.touches(ball[i])) {
@@ -137,10 +177,26 @@ class Ball {
 
 }
 
-function mouseClicked() {
-  if ((mouseX > 80 || mouseY > 23) && (mouseX < width - 50 || mouseY > 23)) {
-    ball.push(new Ball());
-  }
+// function mouseClicked() {
+//   if ((mouseX > 80 || mouseY > 23) && (mouseX < width - 50 || mouseY > 23)) {
+//     ball.push(new Ball());
+//   }
+// }
+
+function mousePressed(){
+  tempx = mouseX;
+  tempy = mouseY;
+}
+function mouseDragged(){
+  drag = true;
+}
+
+function mouseReleased(){
+  drag = false;
+  velx = tempx - mouseX;
+  vely = tempy - mouseY;
+  ball.push(new Ball(velx,vely));
+  
 }
 
 function ESC() {
@@ -211,7 +267,9 @@ window.addEventListener('deviceorientation', function(e)
   alphas = e.alpha;
   beta = e.beta;
   gamma = e.gamma;
+  if(check < 10){
+    ialphas = alphas;
+    ibeta = beta;
+    igamma = gamma;
+  }
 });
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
