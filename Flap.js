@@ -5,7 +5,9 @@ var oW = 0;
 var oH = 0;
 
 function setup() {
-  createCanvas(displayWidth, displayHeight);
+  var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  createCanvas(w, h);
   oW = windowWidth;
   oH = windowHeight;
   pipe = new Pipe();
@@ -210,3 +212,6 @@ window.addEventListener('deviceorientation', function(e)
   beta = e.beta;
   gamma = e.gamma;
 });
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
