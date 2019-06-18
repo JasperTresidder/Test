@@ -5,7 +5,7 @@ var oW = 0;
 var oH = 0;
 
 function setup() {
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(displayWidth,displayHeight);
   oW = windowWidth;
   oH = windowHeight;
   pipe = new Pipe();
@@ -132,13 +132,6 @@ function mouseClicked() {
 function ESC(){
     let fs = fullscreen();
     fullscreen(!fs);
-    if(fs=true){
-      createCanvas(displayWidth,displayHeight);
-    
-    }else{
-      createCanvas(oW,oH);
-    }
-    background(220);
 }
 
 
