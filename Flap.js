@@ -1,8 +1,13 @@
 ball = [];
 temp = [];
 
+var oW = 0;
+var oH = 0;
+
 function setup() {
-  createCanvas(1440,900);
+  createCanvas(windowWidth,windowHeight);
+  oW = windowWidth;
+  oH = windowHeight;
   pipe = new Pipe();
   
   button = createButton('fullScreen');
@@ -124,6 +129,13 @@ function mouseClicked() {
 function ESC(){
     let fs = fullscreen();
     fullscreen(!fs);
+    if(fs=true){
+      createCanvas(displayWidth,displayHeight);
+    
+    }else{
+      createCanvas(oW,oH);
+    }
+    background(220);
 }
 
 
