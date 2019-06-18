@@ -99,7 +99,7 @@ class Ball {
       
     }    
     if (this.y + 25 > height) {
-      this.velocity.y = -(this.velocity.y * 0.9);
+      this.velocity.y = -(this.velocity.y );
       this.y = -25 + height;
       if(this.down == 0){
         //this.velocity.x = random(-4, 4)
@@ -114,6 +114,8 @@ class Ball {
     //console.log('ok');
     
     }
+    this.velocity.x = this.velocity.x*0.993;
+    this.velocity.y = this.velocity.y*0.993;
   }
 
   show() {
